@@ -1,12 +1,11 @@
 import streamlit as st
-import time
 import os
 
 st.set_page_config(page_title="For You ❤️", page_icon="💖", layout="wide")
 
 base_path = os.path.dirname(__file__)
 
-# CSS
+# CSS animation (key fix)
 st.markdown("""
 <style>
 body {
@@ -14,7 +13,7 @@ body {
 }
 .title {
     text-align: center;
-    font-size: 45px;
+    font-size: 42px;
     font-weight: bold;
     color: white;
 }
@@ -24,74 +23,91 @@ body {
     color: white;
     margin-bottom: 20px;
 }
-.card {
-    background-color: white;
-    padding: 15px;
-    border-radius: 20px;
-    box-shadow: 0px 8px 20px rgba(0,0,0,0.2);
-    text-align: center;
+
+/* Grid */
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
 }
+
+/* Card */
+.card {
+    background: white;
+    padding: 12px;
+    border-radius: 18px;
+    width: 200px;
+    text-align: center;
+    box-shadow: 0px 8px 20px rgba(0,0,0,0.2);
+
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 1s forwards;
+}
+
+/* Delay for each card */
+.card:nth-child(1) { animation-delay: 0.5s; }
+.card:nth-child(2) { animation-delay: 1s; }
+.card:nth-child(3) { animation-delay: 1.5s; }
+.card:nth-child(4) { animation-delay: 2s; }
+.card:nth-child(5) { animation-delay: 2.5s; }
+
+@keyframes fadeUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 .quote {
-    font-size: 14px;
-    margin-top: 8px;
+    font-size: 13px;
+    margin-top: 6px;
 }
 </style>
 """, unsafe_allow_html=True)
 
 # Session state
-if "unlocked" not in st.session_state:
-    st.session_state.unlocked = False
+if "open" not in st.session_state:
+    st.session_state.open = False
 
 # Intro
-if not st.session_state.unlocked:
+if not st.session_state.open:
     st.markdown('<div class="title">💖 Hey You 💖</div>', unsafe_allow_html=True)
     st.markdown('<div class="subtitle">I made something special just for you...</div>', unsafe_allow_html=True)
 
     if st.button("✨ Open Your Surprise ✨"):
-        with st.spinner("Opening... 💕"):
-            time.sleep(2)
-        st.session_state.unlocked = True
+        st.session_state.open = True
         st.rerun()
 
 else:
     st.markdown('<div class="title">For My Love ❤️</div>', unsafe_allow_html=True)
     st.markdown('<div class="subtitle">Every moment with you is magic ✨</div>', unsafe_allow_html=True)
 
-    # Create grid placeholders (2 rows)
-    row1 = st.columns(3)
-    row2 = st.columns(2)
-
-    placeholders = [
-        row1[0].empty(),
-        row1[1].empty(),
-        row1[2].empty(),
-        row2[0].empty(),
-        row2[1].empty()
-    ]
-
     images = [
-        ("img1.jpeg", "💫 You walked into my life and made everything brighter."),
+        ("img1.jpeg", "💫 You changed my world."),
         ("img2.jpeg", "🌸 You are my peace."),
-        ("img3.jpeg", "💖 Your smile is my favorite."),
-        ("img4.jpeg", "🌹 You are my magic."),
-        ("img5.jpeg", "✨ My today & all my tomorrows.")
+        ("img3.jpeg", "💖 Your smile = happiness."),
+        ("img4.jpeg", "🌹 My favorite person."),
+        ("img5.jpeg", "✨ Forever with you.")
     ]
 
-    # Sequential reveal
+    # HTML container
+    html = '<div class="container">'
+
     for i, (img, quote) in enumerate(images):
-        with placeholders[i]:
-            st.markdown('<div class="card">', unsafe_allow_html=True)
+        path = os.path.join(base_path, img)
 
-            # Portrait vs landscape sizing
-            if i in [0, 2]:  # portrait images
-                st.image(os.path.join(base_path, img), width=180)
-            else:  # landscape images
-                st.image(os.path.join(base_path, img), width=250)
+        html += f"""
+        <div class="card">
+            <img src="data:image/jpeg;base64,{open(path, "rb").read().encode("base64").decode()}" width="180">
+            <div class="quote">{quote}</div>
+        </div>
+        """
 
-            st.markdown(f'<div class="quote">{quote}</div>', unsafe_allow_html=True)
-            st.markdown('</div>', unsafe_allow_html=True)
+    html += "</div>"
 
-        time.sleep(1.2)  # delay for animation
+    st.markdown(html, unsafe_allow_html=True)
 
     st.markdown("<br>", unsafe_allow_html=True)
 
