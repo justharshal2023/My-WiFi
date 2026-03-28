@@ -2,7 +2,7 @@ import streamlit as st
 import os
 from PIL import Image
 
-st.set_page_config(page_title="For You ❤️", page_icon="💖", layout="wide")
+st.set_page_config(page_title="My WiFi❤️", page_icon="💖", layout="wide")
 
 base_path = os.path.dirname(__file__)
 
@@ -83,7 +83,7 @@ if not st.session_state.open:
         st.rerun()
 
 else:
-    st.markdown('<div class="title">For My Love ❤️</div>', unsafe_allow_html=True)
+    st.markdown('<div class="title">For My Janu ❤️</div>', unsafe_allow_html=True)
     st.markdown('<div class="subtitle">Every moment with you is magic ✨</div>', unsafe_allow_html=True)
 
     # Load images
@@ -94,10 +94,10 @@ else:
         return img
 
     images = [
-        (load_img("img1.jpeg"), "💫 You changed my world."),
-        (load_img("img2.jpeg", True), "🌸 You are my peace."),
+        (load_img("img1.jpeg"), "💫 Muwahhh."),
+        (load_img("img2.jpeg", True), "🌸 Tum mere chand oo."),
         (load_img("img3.jpeg"), "💖 Your smile = happiness."),
-        (load_img("img4.jpeg", True), "🌹 My favorite person."),
+        (load_img("img4.jpeg", True), "🌹 My favorite Gender is u."),
         (load_img("img5.jpeg", True), "✨ Forever with you.")
     ]
 
@@ -126,4 +126,4 @@ else:
 
     if st.button("💌 One Last Surprise"):
         st.balloons()
-        st.success("I love you more than anything ❤️")
+        st.success("I love you more than anything Aarya ❤️")
