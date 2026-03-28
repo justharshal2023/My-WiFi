@@ -95,10 +95,10 @@ else:
 
     images = [
         (load_img("img1.jpeg"), "💫 Muwahhh."),
-        (load_img("img2.jpeg", True), "🌸 Tum mere chand oo."),
-        (load_img("img3.jpeg"), "💖 Your smile = happiness."),
-        (load_img("img4.jpeg", True), "🌹 My favorite Gender is u."),
-        (load_img("img5.jpeg", True), "✨ Forever with you.")
+        (load_img("img2.jpeg", True), "🌸 तु चाँद है एक धड़कता हुआ."),
+        (load_img("img3.jpeg"), "💖 चोरी से मुझको ही तकता हुआ."),
+        (load_img("img4.jpeg", True), "🌹 सीने से लगके चमकता हुआ."),
+        (load_img("img5.jpeg", True), "✨ मेरी जन्नत का रस्ता, तु ही तु हुआ.")
     ]
 
     # Layout (centered)
