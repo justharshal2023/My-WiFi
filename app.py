@@ -1,8 +1,12 @@
 import streamlit as st
 import time
+import os
 
 # Page config
 st.set_page_config(page_title="For You ❤️", page_icon="💖", layout="wide")
+
+# Base path (safe for deployment)
+base_path = os.path.dirname(__file__)
 
 # Custom CSS
 st.markdown("""
@@ -64,15 +68,15 @@ else:
 
     # --- Frame 1 (Portrait) ---
     st.markdown('<div class="card">', unsafe_allow_html=True)
-    col1, col2, col3 = st.columns([1,2,1])  # center image
+    col1, col2, col3 = st.columns([1,2,1])
     with col2:
-        st.image("img1.jpg", width=300)
+        st.image(os.path.join(base_path, "img1.jpeg"), width=300)
     st.write("💫 *You walked into my life and made everything brighter.*")
     st.markdown('</div>', unsafe_allow_html=True)
 
     # --- Frame 2 (Landscape) ---
     st.markdown('<div class="card">', unsafe_allow_html=True)
-    st.image("img2.jpg", use_container_width=True)
+    st.image(os.path.join(base_path, "img2.jpeg"), use_container_width=True)
     st.write("🌸 *In a world full of chaos, you are my peace.*")
     st.markdown('</div>', unsafe_allow_html=True)
 
@@ -80,19 +84,19 @@ else:
     st.markdown('<div class="card">', unsafe_allow_html=True)
     col1, col2, col3 = st.columns([1,2,1])
     with col2:
-        st.image("img3.jpg", width=300)
+        st.image(os.path.join(base_path, "img3.jpeg"), width=300)
     st.write("💖 *Every smile of yours is my favorite moment.*")
     st.markdown('</div>', unsafe_allow_html=True)
 
     # --- Frame 4 (Landscape) ---
     st.markdown('<div class="card">', unsafe_allow_html=True)
-    st.image("img4.jpg", use_container_width=True)
+    st.image(os.path.join(base_path, "img4.jpeg"), use_container_width=True)
     st.write("🌹 *I didn't believe in magic until I met you.*")
     st.markdown('</div>', unsafe_allow_html=True)
 
     # --- Frame 5 (Landscape) ---
     st.markdown('<div class="card">', unsafe_allow_html=True)
-    st.image("img5.jpg", use_container_width=True)
+    st.image(os.path.join(base_path, "img5.jpeg"), use_container_width=True)
     st.write("✨ *You are my today and all of my tomorrows.*")
     st.markdown('</div>', unsafe_allow_html=True)
 
