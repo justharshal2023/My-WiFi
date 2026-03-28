@@ -1,17 +1,11 @@
 import streamlit as st
 import os
-import base64
 
 st.set_page_config(page_title="For You ❤️", page_icon="💖", layout="wide")
 
 base_path = os.path.dirname(__file__)
 
-# Function to encode image
-def get_base64(img_path):
-    with open(img_path, "rb") as f:
-        return base64.b64encode(f.read()).decode()
-
-# CSS
+# CSS (animation + layout)
 st.markdown("""
 <style>
 body {
@@ -29,23 +23,15 @@ body {
     color: white;
     margin-bottom: 20px;
 }
-.container {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 20px;
-}
 .card {
     background: white;
-    padding: 12px;
-    border-radius: 18px;
-    width: 200px;
+    padding: 10px;
+    border-radius: 15px;
     text-align: center;
-    box-shadow: 0px 8px 20px rgba(0,0,0,0.2);
+    box-shadow: 0px 6px 15px rgba(0,0,0,0.2);
 
     opacity: 0;
-    transform: translateY(20px);
-    animation: fadeUp 1s forwards;
+    animation: fadeIn 1s forwards;
 }
 .card:nth-child(1) { animation-delay: 0.5s; }
 .card:nth-child(2) { animation-delay: 1s; }
@@ -53,21 +39,18 @@ body {
 .card:nth-child(4) { animation-delay: 2s; }
 .card:nth-child(5) { animation-delay: 2.5s; }
 
-@keyframes fadeUp {
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+@keyframes fadeIn {
+    to { opacity: 1; }
 }
 
 .quote {
     font-size: 13px;
-    margin-top: 6px;
+    margin-top: 5px;
 }
 </style>
 """, unsafe_allow_html=True)
 
-# Session
+# Session state
 if "open" not in st.session_state:
     st.session_state.open = False
 
@@ -84,6 +67,10 @@ else:
     st.markdown('<div class="title">For My Love ❤️</div>', unsafe_allow_html=True)
     st.markdown('<div class="subtitle">Every moment with you is magic ✨</div>', unsafe_allow_html=True)
 
+    # Grid layout (fits screen)
+    col1, col2, col3 = st.columns(3)
+    col4, col5 = st.columns(2)
+
     images = [
         ("img1.jpeg", "💫 You changed my world."),
         ("img2.jpeg", "🌸 You are my peace."),
@@ -92,22 +79,22 @@ else:
         ("img5.jpeg", "✨ Forever with you.")
     ]
 
-    html = '<div class="container">'
+    cols = [col1, col2, col3, col4, col5]
 
-    for img, quote in images:
-        path = os.path.join(base_path, img)
-        encoded = get_base64(path)
+    for i, ((img, quote), col) in enumerate(zip(images, cols)):
+        with col:
+            st.markdown(f'<div class="card">', unsafe_allow_html=True)
 
-        html += f"""
-        <div class="card">
-            <img src="data:image/jpeg;base64,{encoded}" width="180">
-            <div class="quote">{quote}</div>
-        </div>
-        """
+            path = os.path.join(base_path, img)
 
-    html += "</div>"
+            # Smaller sizing
+            if i in [0, 2]:  # portrait
+                st.image(path, width=160)
+            else:  # landscape
+                st.image(path, width=220)
 
-    st.markdown(html, unsafe_allow_html=True)
+            st.markdown(f'<div class="quote">{quote}</div>', unsafe_allow_html=True)
+            st.markdown('</div>', unsafe_allow_html=True)
 
     st.markdown("<br>", unsafe_allow_html=True)
 
