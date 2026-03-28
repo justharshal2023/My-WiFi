@@ -1,16 +1,34 @@
 import streamlit as st
 import os
+from PIL import Image
 
 st.set_page_config(page_title="For You ❤️", page_icon="💖", layout="wide")
 
 base_path = os.path.dirname(__file__)
 
-# CSS (animation + layout)
+# --- CSS ---
 st.markdown("""
 <style>
-body {
-    background: linear-gradient(120deg, #ff9a9e, #fad0c4);
+/* Background */
+.stApp {
+    background: linear-gradient(135deg, #ff9a9e, #fecfef);
+    overflow: hidden;
 }
+
+/* Floating hearts */
+.heart {
+    position: fixed;
+    bottom: -10px;
+    font-size: 20px;
+    animation: floatUp 6s linear infinite;
+    color: #ff4d6d;
+}
+@keyframes floatUp {
+    0% { transform: translateY(0); opacity: 1; }
+    100% { transform: translateY(-100vh); opacity: 0; }
+}
+
+/* Title */
 .title {
     text-align: center;
     font-size: 42px;
@@ -23,34 +41,35 @@ body {
     color: white;
     margin-bottom: 20px;
 }
+
+/* Card */
 .card {
-    background: white;
-    padding: 10px;
-    border-radius: 15px;
+    background: transparent;
+    padding: 5px;
     text-align: center;
-    box-shadow: 0px 6px 15px rgba(0,0,0,0.2);
-
-    opacity: 0;
-    animation: fadeIn 1s forwards;
-}
-.card:nth-child(1) { animation-delay: 0.5s; }
-.card:nth-child(2) { animation-delay: 1s; }
-.card:nth-child(3) { animation-delay: 1.5s; }
-.card:nth-child(4) { animation-delay: 2s; }
-.card:nth-child(5) { animation-delay: 2.5s; }
-
-@keyframes fadeIn {
-    to { opacity: 1; }
 }
 
+/* Remove image border/spacing */
+img {
+    border-radius: 12px;
+    margin: 0px !important;
+    padding: 0px !important;
+}
+
+/* Quotes */
 .quote {
-    font-size: 13px;
-    margin-top: 5px;
+    font-size: 14px;
+    color: white;
+    margin-top: 6px;
 }
 </style>
 """, unsafe_allow_html=True)
 
-# Session state
+# --- Floating hearts ---
+for i in range(15):
+    st.markdown(f'<div class="heart" style="left:{i*7}%;">💖</div>', unsafe_allow_html=True)
+
+# Session
 if "open" not in st.session_state:
     st.session_state.open = False
 
@@ -67,34 +86,41 @@ else:
     st.markdown('<div class="title">For My Love ❤️</div>', unsafe_allow_html=True)
     st.markdown('<div class="subtitle">Every moment with you is magic ✨</div>', unsafe_allow_html=True)
 
-    # Grid layout (fits screen)
-    col1, col2, col3 = st.columns(3)
-    col4, col5 = st.columns(2)
+    # Load images
+    def load_img(name, rotate=False):
+        img = Image.open(os.path.join(base_path, name))
+        if rotate:
+            img = img.rotate(90, expand=True)  # anticlockwise
+        return img
 
     images = [
-        ("img1.jpeg", "💫 You changed my world."),
-        ("img2.jpeg", "🌸 You are my peace."),
-        ("img3.jpeg", "💖 Your smile = happiness."),
-        ("img4.jpeg", "🌹 My favorite person."),
-        ("img5.jpeg", "✨ Forever with you.")
+        (load_img("img1.jpeg"), "💫 You changed my world."),
+        (load_img("img2.jpeg", True), "🌸 You are my peace."),
+        (load_img("img3.jpeg"), "💖 Your smile = happiness."),
+        (load_img("img4.jpeg", True), "🌹 My favorite person."),
+        (load_img("img5.jpeg", True), "✨ Forever with you.")
     ]
 
-    cols = [col1, col2, col3, col4, col5]
+    # Layout (centered)
+    col1, col2, col3 = st.columns([1,1,1])
 
-    for i, ((img, quote), col) in enumerate(zip(images, cols)):
-        with col:
-            st.markdown(f'<div class="card">', unsafe_allow_html=True)
+    with col1:
+        st.image(images[0][0], width=180)
+        st.markdown(f'<div class="quote">{images[0][1]}</div>', unsafe_allow_html=True)
 
-            path = os.path.join(base_path, img)
+        st.image(images[3][0], width=180)
+        st.markdown(f'<div class="quote">{images[3][1]}</div>', unsafe_allow_html=True)
 
-            # Smaller sizing
-            if i in [0, 2]:  # portrait
-                st.image(path, width=160)
-            else:  # landscape
-                st.image(path, width=220)
+    with col2:
+        st.image(images[1][0], width=180)
+        st.markdown(f'<div class="quote">{images[1][1]}</div>', unsafe_allow_html=True)
 
-            st.markdown(f'<div class="quote">{quote}</div>', unsafe_allow_html=True)
-            st.markdown('</div>', unsafe_allow_html=True)
+        st.image(images[4][0], width=180)
+        st.markdown(f'<div class="quote">{images[4][1]}</div>', unsafe_allow_html=True)
+
+    with col3:
+        st.image(images[2][0], width=180)
+        st.markdown(f'<div class="quote">{images[2][1]}</div>', unsafe_allow_html=True)
 
     st.markdown("<br>", unsafe_allow_html=True)
 
