@@ -1,11 +1,17 @@
 import streamlit as st
 import os
+import base64
 
 st.set_page_config(page_title="For You ❤️", page_icon="💖", layout="wide")
 
 base_path = os.path.dirname(__file__)
 
-# CSS animation (key fix)
+# Function to encode image
+def get_base64(img_path):
+    with open(img_path, "rb") as f:
+        return base64.b64encode(f.read()).decode()
+
+# CSS
 st.markdown("""
 <style>
 body {
@@ -23,16 +29,12 @@ body {
     color: white;
     margin-bottom: 20px;
 }
-
-/* Grid */
 .container {
     display: flex;
-    flex-wrap: wrap;
     justify-content: center;
+    flex-wrap: wrap;
     gap: 20px;
 }
-
-/* Card */
 .card {
     background: white;
     padding: 12px;
@@ -45,8 +47,6 @@ body {
     transform: translateY(20px);
     animation: fadeUp 1s forwards;
 }
-
-/* Delay for each card */
 .card:nth-child(1) { animation-delay: 0.5s; }
 .card:nth-child(2) { animation-delay: 1s; }
 .card:nth-child(3) { animation-delay: 1.5s; }
@@ -67,7 +67,7 @@ body {
 </style>
 """, unsafe_allow_html=True)
 
-# Session state
+# Session
 if "open" not in st.session_state:
     st.session_state.open = False
 
@@ -92,15 +92,15 @@ else:
         ("img5.jpeg", "✨ Forever with you.")
     ]
 
-    # HTML container
     html = '<div class="container">'
 
-    for i, (img, quote) in enumerate(images):
+    for img, quote in images:
         path = os.path.join(base_path, img)
+        encoded = get_base64(path)
 
         html += f"""
         <div class="card">
-            <img src="data:image/jpeg;base64,{open(path, "rb").read().encode("base64").decode()}" width="180">
+            <img src="data:image/jpeg;base64,{encoded}" width="180">
             <div class="quote">{quote}</div>
         </div>
         """
