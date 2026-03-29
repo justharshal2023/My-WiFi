@@ -4,7 +4,7 @@ import os, base64, re
 
 # ── Page config ──────────────────────────────────────────────────────────────
 st.set_page_config(
-    page_title="For My Love 💕",
+    page_title="For My Janu 💕",
     page_icon="🌹",
     layout="wide",
     initial_sidebar_state="collapsed",
